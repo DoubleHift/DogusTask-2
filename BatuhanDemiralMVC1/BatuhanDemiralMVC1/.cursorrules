@@ -1,0 +1,46 @@
+Aşağıda belirttiğim kurallara uygun bir MVC projesi yapacağım. 
+Söylediklerimin dışında bir şey yapma.
+apisini ve sql sorgularını ayrı bir dosyada yaz.
+varolan kodları değiştirme.
+api restful yap.
+Her zaman türkçe cevap ver.
+ve değişkenleri türkçe yaz.
+Adım adım yap.Ve ben söyleyince yap.
+1) Kullanıcı Yönetimi (Authentication & Authorization)
+	•	Kullanıcılar sisteme kayıt olabilir, giriş yapabilir ve çıkış yapabilir.
+	•	Sadece giriş yapan kullanıcılar yeni blog yazısı ekleyebilir, düzenleyebilir ve silebilir.
+	•	Misafir kullanıcılar sadece blog yazılarını okuyabilir.
+
+2) Blog Yönetimi
+	•	Blog yazıları için CRUD (Create, Read, Update, Delete) işlemleri yapılacaktır.
+	•	Blog yazısı şu alanlara sahip olmalıdır:
+	•	Başlık (Title)
+	•	İçerik (Content)
+	•	Yazar (User) bilgisi
+	•	Yayınlanma Tarihi
+	•	Kategori (Kategori sistemi eklenecek)
+	•	Görsel (Opsiyonel)
+
+3) Veri Tabanı Yapısı
+	•	Entity Framework Core kullanılarak veri tabanı bağlantısı yapılacak.
+	•	Migrations kullanılarak veri tabanı oluşturulacak.
+	•	Aşağıdaki ilişkiler kurulacak:
+	•	Kullanıcı (User) ↔ Blog Yazısı (One to Many)
+	•	Blog Yazısı ↔ Kategori (Many to One)
+	•	Blog yazılarına örnek test verileri eklenecek.
+
+4) Sayfa Yapısı ve Tasarım
+	•	Razor Syntax kullanılarak sayfalar oluşturulacak.
+	•	Bootstrap kullanılarak responsive bir tasarım yapılacak.
+	•	Layout, Partial Views ve Sections kullanılacak.
+	•	Blog detay sayfası (Details Page) yapılacak.
+	•	Blog yazıları anasayfada listelenecek, kategori filtresi olacak.
+
+5) Form İşlemleri ve Validations
+	•	Yeni blog ekleme, düzenleme ve kullanıcı kayıt/giriş formlarında Model Validations yapılacak.
+	•	Hatalar kullanıcıya gösterilecek.
+
+6) Ekstra (Opsiyonel - Bonus)
+	•	Kullanıcılar yazılara yorum bırakabilir.
+	•	Yorumlar sadece giriş yapmış kullanıcılar tarafından yapılabilir.
+	•	Blog yazıları için görsel yükleme özelliği eklenebilir.

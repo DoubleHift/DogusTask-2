@@ -1,0 +1,69 @@
+﻿@model List<BatuhanDemiralMVC1.Models.BlogYazisi>
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1 class="display-4">Blog Yazıları</h1>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Kategoriler</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item @(ViewBag.AktifKategoriId == null ? "active" : "")">
+                        <a asp-controller="Home" asp-action="Index" class="text-decoration-none @(ViewBag.AktifKategoriId == null ? "text-white" : "text-dark")">Tüm Yazılar</a>
+                    </li>
+                    @foreach (var kategori in ViewBag.Kategoriler)
+                    {
+                        <li class="list-group-item @(ViewBag.AktifKategoriId == kategori.Id ? "active" : "")">
+                            <a asp-controller="Home" asp-action="Index" asp-route-kategoriId="@kategori.Id" class="text-decoration-none @(ViewBag.AktifKategoriId == kategori.Id ? "text-white" : "text-dark")">@kategori.Ad</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">
+        Bu kategoride henüz blog yazısı bulunmamaktadır.
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var blogYazisi in Model)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    @if (!string.IsNullOrEmpty(blogYazisi.ResimYolu))
+                    {
+                        <img src="@blogYazisi.ResimYolu" class="card-img-top" alt="@blogYazisi.Baslik" style="height: 200px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <img src="/img/default-blog.jpg" class="card-img-top" alt="@blogYazisi.Baslik" style="height: 200px; object-fit: cover;">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@blogYazisi.Baslik</h5>
+                        <p class="card-text">@(blogYazisi.Icerik.Length > 150 ? $"{blogYazisi.Icerik.Substring(0, 147)}..." : blogYazisi.Icerik)</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="bi bi-person"></i> @blogYazisi.Kullanici.KullaniciAdi |
+                            <i class="bi bi-tag"></i> @blogYazisi.Kategori.Ad |
+                            <i class="bi bi-calendar"></i> @blogYazisi.YayinTarihi.ToString("dd.MM.yyyy")
+                        </small>
+                        <a asp-controller="Blog" asp-action="Detay" asp-route-id="@blogYazisi.Id" class="btn btn-sm btn-primary">Devamını Oku</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

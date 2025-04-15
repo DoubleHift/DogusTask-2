@@ -1,0 +1,70 @@
+@model BatuhanDemiralMVC1.ViewModels.BlogYazisiViewModel
+@{
+    ViewData["Title"] = "Blog Yazısını Düzenle";
+}
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-warning">
+                <h4 class="mb-0">Blog Yazısını Düzenle</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="Duzenle" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="MevcutResimYolu" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Baslik" class="form-label">Başlık</label>
+                        <input asp-for="Baslik" class="form-control" />
+                        <span asp-validation-for="Baslik" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="KategoriId" class="form-label">Kategori</label>
+                        <select asp-for="KategoriId" class="form-select">
+                            <option value="">Kategori Seçin</option>
+                            @foreach (var kategori in ViewBag.Kategoriler)
+                            {
+                                <option value="@kategori.Id">@kategori.Ad</option>
+                            }
+                        </select>
+                        <span asp-validation-for="KategoriId" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Icerik" class="form-label">İçerik</label>
+                        <textarea asp-for="Icerik" class="form-control" rows="10"></textarea>
+                        <span asp-validation-for="Icerik" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        @if (!string.IsNullOrEmpty(Model.MevcutResimYolu))
+                        {
+                            <div class="mb-2">
+                                <label class="form-label">Mevcut Resim</label>
+                                <div>
+                                    <img src="@Model.MevcutResimYolu" style="max-height: 200px; max-width: 100%" class="img-thumbnail" />
+                                </div>
+                            </div>
+                        }
+                        
+                        <label asp-for="ResimDosyasi" class="form-label">Yeni Resim Yükle (İsteğe Bağlı)</label>
+                        <input asp-for="ResimDosyasi" type="file" class="form-control" accept="image/*" />
+                        <span asp-validation-for="ResimDosyasi" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a asp-controller="Blog" asp-action="Detay" asp-route-id="@Model.Id" class="btn btn-secondary">İptal</a>
+                        <button type="submit" class="btn btn-warning">Güncelle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} 

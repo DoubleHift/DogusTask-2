@@ -1,0 +1,106 @@
+@model BatuhanDemiralMVC1.Models.BlogYazisi
+@{
+    ViewData["Title"] = Model.Baslik;
+}
+
+<div class="card mb-4">
+    @if (!string.IsNullOrEmpty(Model.ResimYolu))
+    {
+        <img src="@Model.ResimYolu" class="card-img-top" alt="@Model.Baslik" style="max-height: 400px; object-fit: cover;">
+    }
+    <div class="card-body">
+        <h1 class="card-title">@Model.Baslik</h1>
+        <div class="d-flex justify-content-between mb-3">
+            <div>
+                <span class="badge bg-primary"><i class="bi bi-person"></i> @Model.Kullanici.KullaniciAdi</span>
+                <span class="badge bg-secondary"><i class="bi bi-tag"></i> @Model.Kategori.Ad</span>
+                <span class="badge bg-info"><i class="bi bi-calendar"></i> @Model.YayinTarihi.ToString("dd.MM.yyyy HH:mm")</span>
+            </div>
+            @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.Kullanici.KullaniciAdi)
+            {
+                <div>
+                    <a asp-controller="Blog" asp-action="Duzenle" asp-route-id="@Model.Id" class="btn btn-sm btn-warning">Düzenle</a>
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#silModal">Sil</button>
+                </div>
+            }
+        </div>
+        <p class="card-text">@Html.Raw(Model.Icerik.Replace("\n", "<br />"))</p>
+    </div>
+</div>
+
+<!-- Yorumlar -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h4>Yorumlar (@Model.Yorumlar.Count)</h4>
+    </div>
+    <div class="card-body">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form asp-controller="Blog" asp-action="YorumEkle" method="post">
+                <input type="hidden" name="blogYazisiId" value="@Model.Id" />
+                <div class="mb-3">
+                    <textarea name="yorumIcerik" class="form-control" rows="3" placeholder="Yorumunuzu buraya yazın..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Yorum Yap</button>
+            </form>
+            <hr />
+        }
+        else
+        {
+            <div class="alert alert-info">
+                Yorum yapabilmek için <a asp-controller="Hesap" asp-action="Giris">giriş yapmalısınız</a>.
+            </div>
+        }
+
+        @if (Model.Yorumlar != null && Model.Yorumlar.Any())
+        {
+            @foreach (var yorum in Model.Yorumlar.OrderByDescending(y => y.YorumTarihi))
+            {
+                <div class="card mb-2">
+                    <div class="card-header d-flex justify-content-between">
+                        <div>
+                            <i class="bi bi-person-circle"></i> @yorum.Kullanici.KullaniciAdi
+                        </div>
+                        <div>
+                            <small class="text-muted">@yorum.YorumTarihi.ToString("dd.MM.yyyy HH:mm")</small>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">@Html.Raw(yorum.Icerik.Replace("\n", "<br />"))</p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center text-muted my-4">
+                <i class="bi bi-chat-square-text" style="font-size: 3rem;"></i>
+                <p class="mt-2">Henüz yorum yapılmamış. İlk yorumu siz yapın!</p>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Silme Modal -->
+@if (User.Identity.IsAuthenticated && User.Identity.Name == Model.Kullanici.KullaniciAdi)
+{
+    <div class="modal fade" id="silModal" tabindex="-1" aria-labelledby="silModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="silModalLabel">Blog Yazısını Sil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    Bu blog yazısını silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <form asp-controller="Blog" asp-action="Sil" asp-route-id="@Model.Id" method="post">
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+} 

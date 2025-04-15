@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\BatuhanDemiralMVC1.props" />
+</Project>
